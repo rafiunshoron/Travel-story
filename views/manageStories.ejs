@@ -1,0 +1,63 @@
+\<div class="container mx-auto p-6 bg-white">
+    <div class="flex justify-between items-center mb-3">
+        <h2 class="text-3xl font-bold mb-4">My Blogs</h2>
+
+        <!-- Back to Dashboard Button -->
+        <div class="mb-4">
+            <form action="/dashboard" method="GET" style="display: inline;">
+                <button type="submit" class="btn btn-second">Dashboard</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="stories-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% if (stories.length===0) { %>
+            <p class="text-gray-600">You have no stories yet. Add one using the "Add New Blog Post" button on the
+                dashboard.</p>
+            <% } else { %>
+                <% stories.forEach(story=> { %>
+                    <div class="card bg-base-100 shadow-lg rounded-lg overflow-hidden">
+                        <figure>
+                            <img src="<%= story.imageUrl %>" class="object-cover h-48 w-full" alt="<%= story.title %>">
+                        </figure>
+                        <div class="card-body p-4">
+                            <h3 class="text-xl font-semibold mb-2">
+                                <%= story.title %>
+                            </h3>
+                            <p class="text-sm text-gray-600"><strong>Location Visited:</strong>
+                                <%= story.visitedLocation %>
+                            </p>
+                            <p class="gray-700 mb-4">
+                                <%= story.story.substring(0, 100) %>...
+                            </p>
+                            <div class="flex justify-end space-x-2">
+                                <form action="/edit-story/<%= story._id %>" method="GET">
+                                    <button type="submit" class="btn btn-main">Edit</button>
+                                </form>
+                                <form action="/delete-story/<%= story._id %>?_method=DELETE" method="POST"
+                                    style="display: inline;">
+                                    <button type="submit" class="btn btn-red">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+                        <% } %>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="flex justify-center mt-6">
+        <% if (currentPage> 1) { %>
+            <a href="/manage-stories?page=<%= currentPage - 1 %>" class="btn btn-main mr-2">Previous</a>
+            <% } %>
+                <% for (let i=1; i <=totalPages; i++) { %>
+                    <a href="/manage-stories?page=<%= i %>"
+                        class="btn <%= currentPage === i ? 'btn-active' : 'btn-secondary' %> mx-1">
+                        <%= i %>
+                    </a>
+                    <% } %>
+                        <% if (currentPage < totalPages) { %>
+                            <a href="/manage-stories?page=<%= currentPage + 1 %>" class="btn btn-main ml-2">Next</a>
+                            <% } %>
+    </div>
+</div>

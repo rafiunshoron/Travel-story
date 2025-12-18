@@ -1,0 +1,46 @@
+<div class="container mx-auto p-6 bg-white">
+    <div class="mb-4">
+        <form action="/dashboard" method="GET" style="display: inline;">
+            <button type="submit" class="btn btn-second">Dashboard</button>
+        </form>
+    </div>
+    <h2 class="text-3xl font-bold mb-6">My Saved Stories</h2>
+    <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% if (stories.length===0) { %>
+            <p>No stories found.</p>
+            <% } else { %>
+                <% stories.forEach(story=> { %>
+                    <div class="card bg-base-100 shadow-xl relative">
+                        <!-- Save/Unsave button section above the image -->
+                        <div class="absolute top-4 right-4">
+                            <form action="/toggle-save-story/<%= story._id %>" method="POST" style="display:inline;">
+                                <button type="submit" class="btn p-4 border-slate-400 bg-slate-300">
+                                    <i
+                                        class="fas <%= user.savedStories.some(savedStory => savedStory._id.toString() === story._id.toString()) ? 'fa-heart text-red-500' : 'fa-heart text-white' %>"></i>
+                                </button>
+                            </form>
+                        </div>
+
+                        <figure>
+                            <img src="<%= story.imageUrl %>" alt="<%= story.title %>" class="object-cover h-48 w-full">
+                        </figure>
+                        <div class="card-body">
+                            <h3 class="text-xl font-semibold">
+                                <%= story.title %>
+                            </h3>
+                            <p><strong>Location Visited:</strong>
+                                <%= story.visitedLocation %>
+                            </p>
+                            <p class="text-gray-700">
+                                <%= story.story.substring(0, 100) %>...
+                            </p>
+                            <div class="card-actions justify-end">
+                                <!-- Updated Read More button to link to a new page -->
+                                <a href="/story/<%= story._id %>" class="btn btn-second">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+                        <% } %>
+    </div>
+</div>

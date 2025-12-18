@@ -1,0 +1,57 @@
+<div class="container mx-auto mt-10 p-6 bg-white rounded-lg">
+    <h1 class="text-3xl font-bold mb-6">Search Results:</h1>
+
+    <!-- Button to go back to the Dashboard -->
+    <div class="mb-4">
+        <form action="/dashboard" method="GET" style="display: inline;">
+            <button type="submit" class="btn btn-main">Dashboard</button>
+        </form>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% if (stories.length===0) { %>
+            <p class="text-center text-gray-500">No stories found matching your search criteria.</p>
+            <% } else { %>
+                <% stories.forEach(story=> { %>
+                    <div class="card bg-base-100 shadow-xl">
+                        <figure>
+                            <img src="<%= story.imageUrl %>" alt="<%= story.title %>" class="object-cover h-48 w-full">
+                        </figure>
+                        <div class="card-body">
+                            <h3 class="text-xl font-semibold">
+                                <%= story.title %>
+                            </h3>
+                            <p><strong>Location Visited:</strong>
+                                <%= story.visitedLocation %>
+                            </p>
+                            <p class="text-gray-700">
+                                <%= story.story.substring(0, 100) %>...
+                            </p>
+                            <div class="card-actions justify-end">
+                                <!-- Updated Read More button to link to a new page -->
+                                <a href="/story/<%= story._id %>" class="btn btn-second">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+                        <% } %>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="flex justify-center mt-6">
+        <% if (currentPage> 1) { %>
+            <a href="/search-results?page=<%= currentPage - 1 %>&query=<%= query %>"
+                class="btn btn-main mr-2">Previous</a>
+            <% } %>
+                <% for (let i=1; i <=totalPages; i++) { %>
+                    <a href="/search-results?page=<%= i %>&query=<%= query %>"
+                        class="btn <%= currentPage === i ? 'btn-active' : 'btn-secondary' %> mx-1">
+                        <%= i %>
+                    </a>
+                    <% } %>
+                        <% if (currentPage < totalPages) { %>
+                            <a href="/search-results?page=<%= currentPage + 1 %>&query=<%= query %>"
+                                class="btn btn-main ml-2">Next</a>
+                            <% } %>
+    </div>
+</div>
